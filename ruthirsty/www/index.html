@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https://ssl.gstatic.com https://fonts.googleapis.com https://fonts.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; media-src *; img-src 'self' data: content:;">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
@@ -12,17 +12,181 @@
     </head>
     <body>
         <div class="app">
-            <h1>💧 喝水打卡</h1>
+            <!-- Settings Button -->
+            <button id="settingsBtn" class="settings-btn" title="设置">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97 0-.33-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1 0 .33.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.66z" fill="currentColor"/>
+                </svg>
+            </button>
+
+            <h1>💧 该喝水啦</h1>
+
+            <!-- Progress Ring -->
+            <div class="progress-ring-container">
+                <svg class="progress-ring" viewBox="0 0 200 200">
+                    <defs>
+                        <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#0099ff;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="progressGradientComplete" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00ff88;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="progressGlow">
+                            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <circle class="progress-ring-bg"
+                            cx="100"
+                            cy="100"
+                            r="85"
+                            fill="none"
+                            stroke="rgba(255, 255, 255, 0.1)"
+                            stroke-width="12"/>
+                    <circle id="progressCircle"
+                            class="progress-ring-progress"
+                            cx="100"
+                            cy="100"
+                            r="85"
+                            fill="none"
+                            stroke="url(#progressGradient)"
+                            stroke-width="12"
+                            stroke-linecap="round"
+                            stroke-dasharray="534.07"
+                            stroke-dashoffset="534.07"
+                            transform="rotate(-90 100 100)"
+                            filter="url(#progressGlow)"/>
+                </svg>
+                <div class="progress-content">
+                    <div class="progress-percentage" id="progressPercentage">0%</div>
+                    <div class="progress-amount" id="progressAmount">0 / 2000ml</div>
+                    <div class="progress-label">今日进度</div>
+                </div>
+            </div>
 
             <div class="stats-container">
                 <div class="stat-item">
                     <div class="stat-label">今日打卡次数</div>
-                    <div class="stat-value" id="todayCount">0</div>
+                    <div class="stat-display">
+                        <div class="stat-droplet">
+                            <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="statDropletGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:rgba(0,212,255,0.9);stop-opacity:1" />
+                                        <stop offset="50%" style="stop-color:rgba(0,180,255,0.8);stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:rgba(0,153,255,1);stop-opacity:1" />
+                                    </linearGradient>
+                                    <filter id="statDropletGlow">
+                                        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                        <feMerge>
+                                            <feMergeNode in="coloredBlur"/>
+                                            <feMergeNode in="SourceGraphic"/>
+                                        </feMerge>
+                                    </filter>
+                                </defs>
+                                <path d="M50,10 C50,10 20,45 20,70 C20,88 33,105 50,105 C67,105 80,88 80,70 C80,45 50,10 50,10 Z"
+                                      fill="url(#statDropletGradient)"
+                                      filter="url(#statDropletGlow)"
+                                      stroke="rgba(255,255,255,0.6)"
+                                      stroke-width="2"/>
+                                <ellipse cx="38" cy="45" rx="10" ry="15" fill="rgba(255,255,255,0.5)" opacity="0.6"/>
+                            </svg>
+                        </div>
+                        <div class="stat-value" id="todayCount">0</div>
+                    </div>
                 </div>
             </div>
 
             <button id="checkInBtn" class="check-in-btn">
-                <span class="btn-icon">💧</span>
+                <div class="water-cup">
+                    <svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <!-- 水杯玻璃渐变 -->
+                            <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+                            </linearGradient>
+                            <!-- 水的渐变 -->
+                            <linearGradient id="waterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:rgba(0,212,255,0.6);stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:rgba(0,180,255,0.7);stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:rgba(0,153,255,0.8);stop-opacity:1" />
+                            </linearGradient>
+                            <!-- 吸管渐变 -->
+                            <linearGradient id="strawGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:rgba(255,100,150,0.8);stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:rgba(255,150,200,0.8);stop-opacity:1" />
+                            </linearGradient>
+                            <!-- 发光效果 -->
+                            <filter id="cupGlow">
+                                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+
+                        <!-- 杯子主体 (梯形) -->
+                        <path d="M35,40 L30,120 L90,120 L85,40 Z"
+                              fill="url(#glassGradient)"
+                              stroke="rgba(255,255,255,0.5)"
+                              stroke-width="2"
+                              filter="url(#cupGlow)"/>
+
+                        <!-- 水 -->
+                        <path d="M32,70 Q60,65 88,70 L87,118 L33,118 Z"
+                              fill="url(#waterGradient)"
+                              opacity="0.9"/>
+
+                        <!-- 水面波纹 -->
+                        <path d="M32,70 Q45,67 60,70 T88,70"
+                              fill="none"
+                              stroke="rgba(255,255,255,0.4)"
+                              stroke-width="1.5"/>
+
+                        <!-- 杯口 -->
+                        <ellipse cx="60" cy="40" rx="25" ry="6"
+                                 fill="rgba(255,255,255,0.2)"
+                                 stroke="rgba(255,255,255,0.6)"
+                                 stroke-width="2"/>
+
+                        <!-- 吸管 -->
+                        <rect x="72" y="5" width="8" height="80" rx="4"
+                              fill="url(#strawGradient)"
+                              stroke="rgba(255,255,255,0.5)"
+                              stroke-width="1.5"
+                              transform="rotate(-15 76 45)"/>
+
+                        <!-- 吸管内部高光 -->
+                        <rect x="73.5" y="5" width="2" height="80" rx="1"
+                              fill="rgba(255,255,255,0.5)"
+                              transform="rotate(-15 76 45)"/>
+
+                        <!-- 吸管弯头 -->
+                        <path d="M68,15 Q72,10 78,12"
+                              fill="none"
+                              stroke="url(#strawGradient)"
+                              stroke-width="8"
+                              stroke-linecap="round"
+                              transform="rotate(-15 76 15)"/>
+
+                        <!-- 杯子高光 -->
+                        <ellipse cx="45" cy="60" rx="8" ry="20"
+                                 fill="rgba(255,255,255,0.3)"
+                                 opacity="0.5"/>
+
+                        <!-- 气泡 -->
+                        <circle cx="50" cy="95" r="3" fill="rgba(255,255,255,0.4)" opacity="0.6"/>
+                        <circle cx="65" cy="85" r="2.5" fill="rgba(255,255,255,0.4)" opacity="0.5"/>
+                        <circle cx="70" cy="100" r="2" fill="rgba(255,255,255,0.4)" opacity="0.7"/>
+                    </svg>
+                </div>
                 <span class="btn-text">喝水打卡</span>
             </button>
 
@@ -35,6 +199,20 @@
 
             <button id="clearBtn" class="clear-btn">清空今日记录</button>
         </div>
+
+        <!-- Modal Overlay -->
+        <div class="modal-overlay" id="modalOverlay"></div>
+
+        <!-- Celebration Overlay -->
+        <div class="celebration-overlay" id="celebrationOverlay">
+            <div class="celebration-content">
+                <div class="celebration-icon">🎉</div>
+                <h2 class="celebration-title">恭喜完成目标！</h2>
+                <p class="celebration-message">今天的饮水目标已达成</p>
+                <div class="celebration-confetti" id="celebrationConfetti"></div>
+            </div>
+        </div>
+
         <script src="cordova.js"></script>
         <script src="js/index.js"></script>
     </body>
