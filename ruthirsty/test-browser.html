@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+    <title>喝水打卡 - 浏览器测试版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;使用
+            padding: 20px;
+        }
+
+        .app {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .stats-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            color: #667eea;
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .check-in-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50px;
+            padding: 20px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .check-in-btn:active {
+            transform: scale(0.95);
+        }
+
+        .check-in-btn.clicked {
+            animation: pulse 0.3s ease;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-icon {
+            font-size: 32px;
+        }
+
+        .records-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .records-container h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .records-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            font-size: 16px;
+        }
+
+        .record-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .record-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .record-number {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 16px;
+            min-width: 40px;
+        }
+
+        .record-time {
+            flex: 1;
+            color: #333;
+            font-size: 18px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .record-icon {
+            font-size: 24px;
+        }
+
+        .clear-btn {
+            width: 100%;
+            background: #dc3545;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .clear-btn:active {
+            transform: scale(0.98);
+            background: #c82333;
+        }
+
+        .records-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .records-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .records-list::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+
+            .stat-value {
+                font-size: 36px;
+            }
+
+            .check-in-btn {
+                font-size: 20px;
+                padding: 15px;
+            }
+
+            .btn-icon {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <h1>💧 喝水打卡</h1>
+
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-label">今日打卡次数</div>
+                <div class="stat-value" id="todayCount">0</div>
+            </div>
+        </div>
+
+        <button id="checkInBtn" class="check-in-btn">
+            <span class="btn-icon">💧</span>
+            <span class="btn-text">喝水打卡</span>
+        </button>
+
+        <div class="records-container">
+            <h2>今日记录</h2>
+            <div id="recordsList" class="records-list">
+                <p class="empty-message">今天还没有喝水记录哦~</p>
+            </div>
+        </div>
+
+        <button id="clearBtn" class="clear-btn">清空今日记录</button>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'waterRecords';
+        let records = [];
+
+        // 页面加载时初始化
+        window.addEventListener('load', function() {
+            initApp();
+        });
+
+        function initApp() {
+            loadRecords();
+            document.getElementById('checkInBtn').addEventListener('click', handleCheckIn);
+            document.getElementById('clearBtn').addEventListener('click', handleClear);
+            updateDisplay();
+        }
+
+        function loadRecords() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    records = JSON.parse(stored);
+                    records = getTodayRecords(records);
+                } else {
+                    records = [];
+                }
+            } catch (e) {
+                console.error('加载记录失败:', e);
+                records = [];
+            }
+        }
+
+        function saveRecords() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+            } catch (e) {
+                console.error('保存记录失败:', e);
+                alert('保存失败，请检查存储空间');
+            }
+        }
+
+        function getTodayRecords(allRecords) {
+            const today = new Date();
+            const todayStr = formatDate(today);
+            return allRecords.filter(record => {
+                const recordDate = new Date(record.timestamp);
+                return formatDate(recordDate) === todayStr;
+            });
+        }
+
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function formatTime(date) {
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            return `${hours}:${minutes}:${seconds}`;
+        }
+
+        function handleCheckIn() {
+            const now = new Date();
+            const record = {
+                id: Date.now(),
+                timestamp: now.toISOString(),
+                date: formatDate(now),
+                time: formatTime(now)
+            };
+
+            records.unshift(record);
+            saveRecords();
+            updateDisplay();
+            showFeedback();
+        }
+
+        function showFeedback() {
+            const btn = document.getElementById('checkInBtn');
+            btn.classList.add('clicked');
+            setTimeout(() => {
+                btn.classList.remove('clicked');
+            }, 300);
+        }
+
+        function handleClear() {
+            if (records.length === 0) {
+                alert('没有记录可以清空');
+                return;
+            }
+
+            if (confirm('确定要清空今日所有记录吗？')) {
+                records = [];
+                saveRecords();
+                updateDisplay();
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('todayCount').textContent = records.length;
+
+            const recordsList = document.getElementById('recordsList');
+
+            if (records.length === 0) {
+                recordsList.innerHTML = '<p class="empty-message">今天还没有喝水记录哦~</p>';
+            } else {
+                let html = '';
+                records.forEach((record, index) => {
+                    html += `
+                        <div class="record-item">
+                            <div class="record-number">#${records.length - index}</div>
+                            <div class="record-time">${record.time}</div>
+                            <div class="record-icon">💧</div>
+                        </div>
+                    `;
+                });
+                recordsList.innerHTML = html;
+            }
+        }
+    </script>
+</body>
+</html>

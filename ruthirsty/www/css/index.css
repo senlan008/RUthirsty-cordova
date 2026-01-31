@@ -1,0 +1,246 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+html {
+    overscroll-behavior: none;
+}
+
+body {
+    -webkit-touch-callout: none;
+    -webkit-text-size-adjust: none;
+    -webkit-user-select: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    padding: env(safe-area-inset-top, 20px) env(safe-area-inset-right, 20px) env(safe-area-inset-bottom, 20px) env(safe-area-inset-left, 20px);
+    text-size-adjust: none;
+    user-select: none;
+}
+
+.app {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    text-transform: none;
+}
+
+/* 统计容器 */
+.stats-container {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-transform: none;
+}
+
+.stat-value {
+    color: #667eea;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+/* 打卡按钮 */
+.check-in-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 50px;
+    padding: 20px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    text-transform: none;
+}
+
+.check-in-btn:active {
+    transform: scale(0.95);
+}
+
+.check-in-btn.clicked {
+    animation: pulse 0.3s ease;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.btn-icon {
+    font-size: 32px;
+}
+
+/* 记录容器 */
+.records-container {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.records-container h2 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+    text-transform: none;
+}
+
+.records-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.empty-message {
+    text-align: center;
+    color: #999;
+    padding: 40px 20px;
+    font-size: 16px;
+    text-transform: none;
+}
+
+.record-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.record-item:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+.record-number {
+    color: #667eea;
+    font-weight: bold;
+    font-size: 16px;
+    min-width: 40px;
+}
+
+.record-time {
+    flex: 1;
+    color: #333;
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    text-transform: none;
+}
+
+.record-icon {
+    font-size: 24px;
+}
+
+/* 清空按钮 */
+.clear-btn {
+    width: 100%;
+    background: #dc3545;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: none;
+}
+
+.clear-btn:active {
+    transform: scale(0.98);
+    background: #c82333;
+}
+
+/* 滚动条样式 */
+.records-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.records-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.records-list::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 10px;
+}
+
+.records-list::-webkit-scrollbar-thumb:hover {
+    background: #5568d3;
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+        padding: env(safe-area-inset-top, 10px) env(safe-area-inset-right, 10px) env(safe-area-inset-bottom, 10px) env(safe-area-inset-left, 10px);
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .stat-value {
+        font-size: 36px;
+    }
+
+    .check-in-btn {
+        font-size: 20px;
+        padding: 15px;
+    }
+
+    .btn-icon {
+        font-size: 28px;
+    }
+}
+
+@media screen and (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    }
+}

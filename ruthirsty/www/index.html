@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+        <meta name="color-scheme" content="light dark">
+        <link rel="stylesheet" href="css/index.css">
+        <title>喝水打卡</title>
+    </head>
+    <body>
+        <div class="app">
+            <h1>💧 喝水打卡</h1>
+
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-label">今日打卡次数</div>
+                    <div class="stat-value" id="todayCount">0</div>
+                </div>
+            </div>
+
+            <button id="checkInBtn" class="check-in-btn">
+                <span class="btn-icon">💧</span>
+                <span class="btn-text">喝水打卡</span>
+            </button>
+
+            <div class="records-container">
+                <h2>今日记录</h2>
+                <div id="recordsList" class="records-list">
+                    <p class="empty-message">今天还没有喝水记录哦~</p>
+                </div>
+            </div>
+
+            <button id="clearBtn" class="clear-btn">清空今日记录</button>
+        </div>
+        <script src="cordova.js"></script>
+        <script src="js/index.js"></script>
+    </body>
+</html>
